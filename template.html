@@ -1,0 +1,724 @@
+<!doctype html>
+<!-- ====================================================================
+  Principle Deepdive HTML · single-file template
+  ============================================================
+  Copy this file as starting point. Only modify:
+  1. <title> and <meta name="description">
+  2. --hero-grad in :root (see color-palettes.md for ready-to-use combinations)
+  3. .brand-icon character (each page has its own symbol, e.g. ① ② Σ ⊥)
+  4. All TODO: placeholders throughout the body
+  5. Number of principle / solution sections (duplicate or remove as needed)
+  ============================================================
+  Do NOT modify:
+  - CSS variable names (--bg / --primary / --accent · 11 semantic color tokens)
+  - Component class names (.nav / .hero / .principle / .citation / .sol-card · see SKILL.md contract table)
+  - Emoji prefixes (💡📖🔧⚠️🎯 · part of the visual language)
+  - Font stack (PingFang SC → system fallback · covers CJK + Latin)
+  - Theme-toggle JS (localStorage key 'deepdive-theme' is configurable but keep the pattern)
+  ============================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- TODO: 替换为实际 title -->
+<title>TODO 主题 · 跨学科原理深拆 · TODO 简短副标题</title>
+<!-- TODO: 替换为实际 description -->
+<meta name="description" content="TODO 一句话描述这页讲什么、跨哪几个学科、有哪些核心论点" />
+<style>
+  /* ========== 主题 token · 11 套语义色 · 不改名 ========== */
+  :root{
+    --bg:#0b0d12; --bg-soft:#11141b; --bg-card:#161b25; --bg-card-2:#1c2230;
+    --border:#252c3a; --border-soft:#1d2330;
+    --text:#e6e9ef; --text-soft:#aab1bf; --text-dim:#727b8c;
+    --primary:#6366f1; --primary-soft:#818cf8; --primary-bg:rgba(99,102,241,.12);
+    --accent:#f59e0b; --accent-soft:#fbbf24; --accent-bg:rgba(245,158,11,.12);
+    --green:#10b981; --green-bg:rgba(16,185,129,.12);
+    --yellow:#eab308; --yellow-bg:rgba(234,179,8,.12);
+    --red:#ef4444; --red-bg:rgba(239,68,68,.12);
+    --purple:#a855f7; --purple-bg:rgba(168,85,247,.12);
+    --teal:#14b8a6; --teal-bg:rgba(20,184,166,.12);
+    --pink:#ec4899; --pink-bg:rgba(236,72,153,.12);
+    --gray:#64748b; --gray-bg:rgba(100,116,139,.12);
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.3);
+    --radius:10px; --radius-sm:6px;
+    --fs-body:15px;
+    --font:'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans CJK SC',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace;
+    /* TODO: 选一对未被其他 deepdive 占用的色（见 color-palettes.md） */
+    --hero-grad: linear-gradient(135deg, #6366f1 0%, #f59e0b 100%);
+  }
+  html[data-theme="light"]{
+    --bg:#fafafa; --bg-soft:#f4f5f7; --bg-card:#ffffff; --bg-card-2:#f8f9fb;
+    --border:#e5e7eb; --border-soft:#eef0f3;
+    --text:#0f172a; --text-soft:#475569; --text-dim:#94a3b8;
+    --primary:#4f46e5; --primary-soft:#6366f1; --primary-bg:rgba(79,70,229,.08);
+    --accent:#d97706; --accent-soft:#f59e0b; --accent-bg:rgba(217,119,6,.08);
+    --green:#059669; --green-bg:rgba(5,150,105,.08);
+    --yellow:#ca8a04; --yellow-bg:rgba(202,138,4,.08);
+    --red:#dc2626; --red-bg:rgba(220,38,38,.08);
+    --purple:#7c3aed; --purple-bg:rgba(124,58,237,.08);
+    --teal:#0d9488; --teal-bg:rgba(13,148,136,.08);
+    --pink:#db2777; --pink-bg:rgba(219,39,119,.08);
+    --gray:#475569; --gray-bg:rgba(71,85,105,.08);
+    --shadow: 0 1px 2px rgba(0,0,0,.05), 0 1px 8px rgba(0,0,0,.04);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:var(--font);font-size:var(--fs-body);line-height:1.7;
+    -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+    transition:background .2s,color .2s;
+  }
+  a{color:var(--primary-soft);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code{font-family:var(--mono);font-size:.88em;padding:.1em .35em;background:var(--bg-soft);border-radius:4px;color:var(--accent-soft)}
+
+  .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+  /* ========== 玻璃态 sticky nav ========== */
+  .nav{
+    position:sticky;top:0;z-index:10;
+    background:rgba(11,13,18,.85);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  html[data-theme="light"] .nav{background:rgba(250,250,250,.88)}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;max-width:1200px;margin:0 auto;flex-wrap:wrap;gap:10px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px}
+  .brand-icon{
+    width:28px;height:28px;border-radius:8px;
+    background:var(--hero-grad);
+    display:inline-flex;align-items:center;justify-content:center;
+    font-weight:700;color:#fff;font-size:13px;
+  }
+  .nav-links{display:flex;gap:16px;align-items:center;font-size:13px;flex-wrap:wrap}
+  .nav-links a{color:var(--text-soft)}
+  .nav-links a:hover{color:var(--text);text-decoration:none}
+  .nav-back{
+    background:transparent;border:1px solid var(--border);
+    color:var(--text-soft) !important;
+    padding:6px 12px;border-radius:6px;font-size:12px;
+    font-family:inherit;display:inline-flex;align-items:center;gap:4px;
+  }
+  .nav-back:hover{background:var(--bg-soft);color:var(--text) !important;text-decoration:none !important}
+  .theme-toggle{
+    background:transparent;border:1px solid var(--border);
+    color:var(--text-soft);
+    padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;
+    font-family:inherit;
+  }
+  .theme-toggle:hover{background:var(--bg-soft);color:var(--text)}
+
+  /* ========== Hero ========== */
+  .hero{padding:72px 0 48px;position:relative}
+  .hero-bg{
+    position:absolute;top:0;left:0;right:0;height:340px;
+    background:var(--hero-grad);opacity:.08;pointer-events:none;
+    border-radius:0 0 30% 30% / 0 0 8% 8%;
+  }
+  .hero-content{position:relative}
+  .hero-eyebrow{
+    display:inline-block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:14px;
+    padding:5px 11px;background:var(--accent-bg);border-radius:999px;
+  }
+  .hero h1{
+    font-size:clamp(28px,4.2vw,42px);line-height:1.18;margin:0 0 12px;
+    letter-spacing:-.02em;font-weight:700;
+  }
+  .hero h1 small{font-size:.5em;color:var(--text-dim);font-weight:500;margin-left:8px;display:inline-block}
+  .hero .lede{font-size:16px;color:var(--text-soft);max-width:820px;line-height:1.7;margin:0 0 24px}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .hero-meta .chip{
+    font-size:12px;font-family:var(--mono);
+    padding:4px 10px;border-radius:4px;
+    background:var(--bg-soft);color:var(--text-soft);
+    border:1px solid var(--border-soft);
+  }
+  .hero-meta .chip strong{color:var(--text);font-weight:600}
+  .hero-meta .chip a{color:var(--primary-soft)}
+
+  /* Hero stat grid · 可选块 (presentation 用) */
+  .hero-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+  .hero-stat{background:var(--bg-card);border:1px solid var(--border);padding:14px 16px;border-radius:var(--radius)}
+  .hero-stat-label{font-size:11px;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;font-weight:600}
+  .hero-stat-value{font-size:22px;font-weight:700;color:var(--text);font-family:var(--mono);letter-spacing:-.01em;line-height:1.1}
+  .hero-stat-value.bad{color:var(--accent-soft)}
+  .hero-stat-value.good{color:var(--green)}
+  .hero-stat-sub{font-size:12px;color:var(--text-soft);margin-top:5px;line-height:1.5}
+
+  /* Principle-toc · 6-up 跳转网格 */
+  .principle-toc{margin-top:32px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .principle-toc a{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);text-decoration:none;transition:transform .15s, border-color .15s}
+  .principle-toc a:hover{transform:translateY(-2px);border-color:var(--accent);text-decoration:none}
+  .principle-toc .toc-num{font-family:var(--mono);font-size:11px;color:var(--text-dim);letter-spacing:.04em}
+  .principle-toc .toc-name{font-size:13.5px;color:var(--text);font-weight:600;line-height:1.4}
+  .principle-toc .toc-discipline{font-size:11px;color:var(--text-dim);font-style:italic}
+
+  /* ========== Principle section · 主体两栏 ========== */
+  section.principle{padding:64px 0;border-top:1px solid var(--border-soft);scroll-margin-top:80px}
+  .principle-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+  .principle-num{
+    flex-shrink:0;
+    width:50px;height:50px;border-radius:14px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--hero-grad);
+    color:#fff;font-weight:700;font-size:18px;font-family:var(--mono);
+  }
+  .principle-head-text{flex:1;min-width:0}
+  .principle-discipline{
+    display:inline-block;font-size:11px;
+    font-family:var(--mono);font-weight:600;
+    padding:3px 10px;border-radius:99px;
+    background:var(--bg-soft);color:var(--text-dim);
+    letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;
+  }
+  /* TODO: 按需自定义学科 chip 配色 · 命名空间用 .principle-discipline.<discipline> */
+  .principle-discipline.psychology{background:var(--purple-bg);color:var(--purple)}
+  .principle-discipline.cogsci{background:var(--primary-bg);color:var(--primary-soft)}
+  .principle-discipline.signal{background:var(--accent-bg);color:var(--accent-soft)}
+  .principle-discipline.dl{background:var(--green-bg);color:var(--green)}
+  .principle-discipline.rl{background:var(--pink-bg);color:var(--pink)}
+  .principle-discipline.logic{background:var(--primary-bg);color:var(--primary-soft)}
+  .principle-discipline.db{background:var(--accent-bg);color:var(--accent-soft)}
+  .principle-discipline.linguistics{background:var(--purple-bg);color:var(--purple)}
+  .principle-title{font-size:clamp(20px,2.3vw,26px);font-weight:700;margin:0 0 6px;letter-spacing:-.01em;line-height:1.3}
+  .principle-tagline{color:var(--text-soft);font-size:14px;margin:0;line-height:1.6}
+
+  .principle-body{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:32px;align-items:start;margin-top:24px}
+  @media (max-width:960px){.principle-body{grid-template-columns:1fr}}
+  .principle-text h3{font-size:14px;margin:24px 0 8px;color:var(--text);font-weight:600;display:flex;align-items:center;gap:8px}
+  .principle-text h3:first-child{margin-top:0}
+  .principle-text h3::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px}
+  .principle-text p{margin:0 0 12px;font-size:14px;color:var(--text-soft);line-height:1.8}
+  .principle-text strong{color:var(--text);font-weight:600}
+  .principle-text ul{margin:0 0 12px;padding-left:22px;font-size:13.5px;color:var(--text-soft);line-height:1.8}
+  .principle-text li{margin:5px 0}
+
+  /* ========== 通用 callout 卡 ========== */
+  /* 💡 essence-box · "一句话精髓" */
+  .essence-box{
+    background:linear-gradient(135deg, var(--accent-bg) 0%, var(--primary-bg) 100%);
+    border-left:3px solid var(--accent);
+    padding:14px 18px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+    margin:14px 0;font-size:14px;color:var(--text);line-height:1.75;
+  }
+  .essence-box strong{color:var(--accent-soft)}
+  .essence-box::before{content:"💡 一句话精髓 → ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent-soft);text-transform:uppercase;letter-spacing:.04em}
+
+  /* 📖 citation · 学术引用 */
+  .citation{
+    margin:10px 0;padding:10px 14px;border-radius:var(--radius-sm);
+    background:var(--bg-soft);border:1px solid var(--border-soft);
+    font-family:var(--mono);font-size:12px;color:var(--text-soft);line-height:1.65;
+  }
+  .citation .year{color:var(--accent-soft);font-weight:700}
+  .citation .author{color:var(--text);font-weight:600}
+  .citation a{color:var(--primary-soft)}
+  .citation::before{content:"📖 ";font-family:var(--font)}
+
+  /* 真实应用 list · 子标题 uppercase */
+  .apply-list{
+    margin:14px 0;padding:14px 18px;background:var(--bg-card-2);
+    border:1px solid var(--border-soft);border-radius:var(--radius-sm);
+  }
+  .apply-list h4{margin:0 0 10px;font-size:13px;color:var(--text);font-weight:600;font-family:var(--font);text-transform:uppercase;letter-spacing:.04em}
+  .apply-list ul{margin:0;padding-left:20px;font-size:13px;color:var(--text-soft);line-height:1.7}
+
+  /* 🔧 framework-use · 我们怎么用 */
+  .framework-use{
+    background:linear-gradient(90deg, var(--primary-bg) 0%, transparent 100%);
+    border-left:3px solid var(--primary);
+    padding:14px 18px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+    margin:14px 0;font-size:13.5px;color:var(--text);line-height:1.7;
+  }
+  .framework-use::before{content:"🔧 这一层在我们栈里怎么打补丁 → ";font-family:var(--mono);font-size:11px;font-weight:600;color:var(--primary-soft);text-transform:uppercase;letter-spacing:.04em}
+
+  /* ⚠️ disclaim · cite 提示 / 警告 */
+  .disclaim{
+    background:var(--yellow-bg);border:1px solid var(--yellow);
+    padding:12px 16px;border-radius:var(--radius-sm);
+    margin:14px 0;font-size:12px;color:var(--text);line-height:1.7;
+  }
+  .disclaim::before{content:"⚠️ ";font-style:normal}
+  .disclaim strong{color:var(--yellow)}
+
+  /* 🎯 framing-box · 立场说明 */
+  .framing-box{
+    background:linear-gradient(135deg, var(--primary-bg) 0%, var(--accent-bg) 100%);
+    border:1px solid var(--accent);
+    padding:18px 22px;border-radius:var(--radius);
+    margin:24px 0;font-size:14px;color:var(--text);line-height:1.75;
+  }
+  .framing-box strong{color:var(--accent-soft)}
+  .framing-box::before{content:"🎯 立场说明 → ";font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-soft);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px}
+
+  /* ========== 右栏 SVG visual ========== */
+  .principle-visual{
+    background:var(--bg-soft);border:1px solid var(--border-soft);
+    border-radius:var(--radius);padding:18px;
+    position:sticky;top:80px;
+  }
+  @media (max-width:960px){.principle-visual{position:static}}
+  .principle-visual svg{display:block;width:100%;height:auto;max-width:100%}
+  .visual-caption{margin-top:10px;font-size:11px;font-style:italic;color:var(--text-dim);text-align:center;font-family:var(--font)}
+
+  /* SVG defaults · 在 inline <svg> 里直接用这些 class */
+  .svg-text{fill:var(--text);font-family:var(--font);font-weight:500}
+  .svg-text-dim{fill:var(--text-dim);font-family:var(--font)}
+  .svg-text-mono{fill:var(--text-soft);font-family:var(--mono)}
+  .svg-text-accent{fill:var(--accent-soft);font-family:var(--font);font-weight:600}
+  .svg-text-green{fill:var(--green);font-family:var(--font);font-weight:600}
+  .svg-text-red{fill:var(--red);font-family:var(--font);font-weight:600}
+  .svg-node{fill:var(--bg-card-2);stroke:var(--border);stroke-width:1.5}
+  .svg-node.primary{stroke:var(--primary);fill:var(--primary-bg)}
+  .svg-node.accent{stroke:var(--accent);fill:var(--accent-bg)}
+  .svg-node.green{stroke:var(--green);fill:var(--green-bg)}
+  .svg-node.red{stroke:var(--red);fill:var(--red-bg)}
+  .svg-node.purple{stroke:var(--purple);fill:var(--purple-bg)}
+
+  /* ========== Collapsible solution card · §"6 个 solutions" 等场景 ========== */
+  .sol-grid{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+  .sol-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .15s}
+  .sol-card:hover{border-color:var(--accent)}
+  .sol-card[open]{border-color:var(--accent)}
+  .sol-card > summary{cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;list-style:none}
+  .sol-card > summary::-webkit-details-marker{display:none}
+  .sol-card > summary::after{content:"+";margin-left:auto;color:var(--text-dim);font-size:22px;font-weight:300;transition:transform .15s}
+  .sol-card[open] > summary::after{content:"−"}
+  .sol-num{flex-shrink:0;width:38px;height:38px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;background:var(--accent-bg);color:var(--accent-soft);font-weight:700;font-size:14px;font-family:var(--mono)}
+  .sol-card[data-fit="3"] .sol-num{background:var(--green-bg);color:var(--green)}
+  .sol-card[data-fit="2"] .sol-num{background:var(--accent-bg);color:var(--accent-soft)}
+  .sol-card[data-fit="1"] .sol-num{background:var(--gray-bg);color:var(--gray)}
+  .sol-head-text{flex:1;min-width:200px}
+  .sol-name{font-size:16px;font-weight:600;color:var(--text);margin:0 0 4px;line-height:1.3}
+  .sol-name small{font-size:11px;color:var(--text-dim);font-family:var(--mono);font-weight:500;margin-left:6px;letter-spacing:.04em}
+  .sol-tagline{font-size:13px;color:var(--text-soft);margin:0;line-height:1.5}
+  .sol-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11px}
+  .sol-meta .chip{padding:3px 9px;border-radius:99px;background:var(--bg-soft);color:var(--text-soft);border:1px solid var(--border-soft);font-family:var(--mono)}
+  .sol-meta .chip.fit3{background:var(--green-bg);color:var(--green);border-color:transparent}
+  .sol-meta .chip.fit2{background:var(--accent-bg);color:var(--accent-soft);border-color:transparent}
+  .sol-meta .chip.fit1{background:var(--gray-bg);color:var(--gray);border-color:transparent}
+  .sol-meta .chip.eta{background:var(--primary-bg);color:var(--primary-soft);border-color:transparent}
+  .sol-body{padding:0 22px 22px;border-top:1px solid var(--border-soft);font-size:14px;line-height:1.75}
+  .sol-body h4{margin:18px 0 8px;font-size:13px;color:var(--text);font-weight:600;font-family:var(--font);text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+  .sol-body h4::before{content:"";width:3px;height:13px;background:var(--accent);border-radius:2px}
+  .sol-body p{margin:8px 0;color:var(--text-soft)}
+  .sol-body p strong{color:var(--text)}
+  .sol-body ul{margin:8px 0;padding-left:22px;color:var(--text-soft)}
+  .sol-body li{margin:4px 0}
+  .sol-body .citation{margin:10px 0}
+  .sol-body .layer-map{background:var(--bg-card-2);border:1px solid var(--border-soft);border-radius:var(--radius-sm);padding:12px 16px;margin:14px 0}
+  .sol-body .layer-map p{margin:6px 0;font-size:13px}
+  .sol-body .layer-map .layer-tag{display:inline-block;font-size:10px;font-family:var(--mono);font-weight:700;padding:2px 7px;border-radius:4px;margin-right:6px;background:var(--primary-bg);color:var(--primary-soft);letter-spacing:.04em}
+  .sol-body .layer-map .layer-tag.l2{background:var(--purple-bg);color:var(--purple)}
+  .sol-body .layer-map .layer-tag.l3{background:var(--accent-bg);color:var(--accent-soft)}
+  .sol-body .layer-map .layer-tag.no{background:var(--gray-bg);color:var(--gray)}
+
+  /* ========== Combo / roadmap 卡 · 3-up 推荐 ========== */
+  .combo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0}
+  @media (max-width:760px){.combo-grid{grid-template-columns:1fr}}
+  .combo-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden}
+  .combo-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent)}
+  .combo-card .combo-step{font-family:var(--mono);font-size:11px;color:var(--accent-soft);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+  .combo-card h4{margin:6px 0 8px;font-size:15px;color:var(--text);font-weight:600}
+  .combo-card p{font-size:12.5px;color:var(--text-soft);margin:6px 0;line-height:1.65}
+  .combo-card .combo-file{font-family:var(--mono);font-size:11px;color:var(--accent-soft);background:var(--accent-bg);padding:2px 6px;border-radius:3px}
+
+  .roadmap-box{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:22px 26px;margin-top:24px}
+  .roadmap-box h3{margin:0 0 8px;font-size:17px;font-weight:600}
+  .roadmap-box p{color:var(--text-soft);font-size:13.5px;margin:8px 0;line-height:1.75}
+  .roadmap-box ol{padding-left:22px;color:var(--text-soft);font-size:13.5px;line-height:1.8}
+  .roadmap-box ol li{margin:8px 0}
+  .roadmap-box ol li strong{color:var(--text)}
+
+  /* ========== Stack overview · 五学科总览图（最后 σ 段·可选） ========== */
+  .stack-overview{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 28px;margin-top:32px}
+  .stack-overview h2{font-size:22px;margin:0 0 8px;letter-spacing:-.01em}
+  .stack-overview p{color:var(--text-soft);font-size:14px;margin:0 0 24px;line-height:1.7}
+
+  /* ========== Footer ========== */
+  .footer{padding:48px 0 32px;color:var(--text-dim);font-size:13px;text-align:center;border-top:1px solid var(--border-soft);margin-top:40px}
+  .footer p{margin:6px 0}
+  .footer .nav-prev-next{display:flex;justify-content:center;gap:14px;margin:18px 0;flex-wrap:wrap}
+  .footer .nav-prev-next a{padding:8px 16px;border-radius:6px;background:var(--bg-card);border:1px solid var(--border);color:var(--text-soft);font-size:13px}
+  .footer .nav-prev-next a:hover{background:var(--accent-bg);color:var(--accent-soft);text-decoration:none;border-color:var(--accent)}
+  .footer .badge{display:inline-block;padding:2px 8px;border-radius:4px;background:var(--bg-soft);color:var(--text-soft);font-size:11px;font-family:var(--mono);margin:2px 4px;border:1px solid var(--border-soft)}
+
+  /* ========== 术语 tooltip · 可选 · 含义提示 ========== */
+  .term{border-bottom:1px dotted var(--text-dim);cursor:help;position:relative}
+  .term:hover{color:var(--text)}
+  .term::after{
+    content:attr(data-tip);
+    position:absolute;bottom:130%;left:50%;transform:translateX(-50%);
+    background:var(--bg-card);color:var(--text);
+    padding:8px 12px;border-radius:6px;
+    font-size:12px;font-weight:400;line-height:1.5;
+    white-space:normal;width:max-content;max-width:280px;
+    border:1px solid var(--border);box-shadow:var(--shadow);
+    opacity:0;pointer-events:none;transition:opacity .15s;
+    z-index:20;text-align:left;
+  }
+  .term:hover::after{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- ========== Nav · sticky 玻璃态 ========== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <!-- TODO: brand-icon 替换为该 deepdive 的符号（如 ① / SM / ⊥ / Σ） -->
+    <div class="brand"><span class="brand-icon">⊥</span><span>TODO 主题 · 跨学科原理深拆</span></div>
+    <div class="nav-links">
+      <!-- TODO: 替换为该 deepdive 的 anchor 链接（与 section id 对应） -->
+      <a href="#p1">L1 原理一</a>
+      <a href="#p2">L2 原理二</a>
+      <a href="#solutions">solutions</a>
+      <!-- TODO: 改为指向父页（main presentation 或 横向调研页） -->
+      <a href="../index.html" class="nav-back">← 父页 / Back</a>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">浅色</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ========== Hero ========== -->
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">TODO eyebrow · 副主题 / 关联工程</span>
+      <h1>TODO 主标题 <small>· TODO 副标题</small></h1>
+      <p class="lede">
+        TODO 一段 lede · max 820px 宽 · 解释这页讲什么 · 包含<strong>跨哪几个学科</strong>的关键词 · 列出<strong>核心结论或工程含义</strong>。约 100-160 字。
+      </p>
+
+      <!-- 可选：元数据 chip -->
+      <div class="hero-meta">
+        <span class="chip"><strong>论文</strong> <a href="https://arxiv.org/abs/TODO" target="_blank" rel="noopener">arXiv TODO</a></span>
+        <span class="chip"><strong>团队</strong> TODO</span>
+        <span class="chip"><strong>类别</strong> TODO</span>
+      </div>
+
+      <!-- 可选：4-card 统计网格（presentation-style 才需要） -->
+      <!--
+      <div class="hero-stat-grid">
+        <div class="hero-stat">
+          <div class="hero-stat-label">TODO 标签</div>
+          <div class="hero-stat-value bad">TODO 值</div>
+          <div class="hero-stat-sub">TODO 副注</div>
+        </div>
+      </div>
+      -->
+
+      <!-- 可选：framing-box 立场说明 -->
+      <!--
+      <div class="framing-box">
+        TODO 立场说明 · 比如本页讨论的是 X · 不是 Y · 学界 2024-2025 已经 ...
+      </div>
+      -->
+
+      <!-- principle-toc · 跳转网格（必有） -->
+      <div class="principle-toc">
+        <!-- TODO: 为每个 principle section 加一张 toc 卡 -->
+        <a href="#p1">
+          <span class="toc-num">PRINCIPLE 01</span>
+          <span class="toc-name">TODO 原理一名称</span>
+          <span class="toc-discipline">TODO 学科 · 年份</span>
+        </a>
+        <a href="#p2">
+          <span class="toc-num">PRINCIPLE 02</span>
+          <span class="toc-name">TODO 原理二名称</span>
+          <span class="toc-discipline">TODO 学科 · 年份</span>
+        </a>
+        <a href="#solutions">
+          <span class="toc-num">SECTION</span>
+          <span class="toc-name">solutions / 推荐组合</span>
+          <span class="toc-discipline">TODO 主题</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== SVG defs · 共用 marker · 不删 ========== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#727b8c"/>
+      </marker>
+      <marker id="ar-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+      </marker>
+      <marker id="ar-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#818cf8"/>
+      </marker>
+      <marker id="ar-r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+      </marker>
+      <marker id="ar-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981"/>
+      </marker>
+    </defs>
+  </svg>
+
+  <!-- ========== Principle 1 · 示例 · 复制扩展 ========== -->
+  <section class="principle" id="p1">
+    <div class="principle-head">
+      <span class="principle-num">①</span>
+      <div class="principle-head-text">
+        <!-- TODO: 替换 .principle-discipline.XXX 的 class · 选 psychology/cogsci/signal/dl/rl/logic/db/linguistics 之一·或新增 -->
+        <span class="principle-discipline cogsci">TODO 学科中文 / Discipline EN</span>
+        <h2 class="principle-title">TODO 原理标题</h2>
+        <p class="principle-tagline">TODO 一句 tagline · 这条原理在原学科里是什么 · 怎么被借用。</p>
+      </div>
+    </div>
+
+    <div class="principle-body">
+      <div class="principle-text">
+
+        <div class="essence-box">
+          TODO 一句话精髓 · 用 <strong>strong</strong> 包关键术语 · 50-150 字。
+        </div>
+
+        <h3>历史脉络 · TODO 子标题</h3>
+        <p>
+          TODO 1-2 段总述 · 这条原理从什么年代起源 · 到现在的发展。可以含 <strong>关键年份</strong> 或 <strong>关键人物</strong>。
+        </p>
+
+        <div class="citation">
+          <span class="year">YEAR</span> <span class="author">Author Name</span>：<em>Paper Title.</em> Venue / Journal · 简短介绍这篇论文做了什么。
+        </div>
+
+        <div class="citation">
+          <span class="year">YEAR</span> <span class="author">Author Name</span>：<em>Paper Title.</em> (<a href="https://arxiv.org/abs/TODO" target="_blank" rel="noopener">arXiv TODO</a>) · 简短介绍。
+        </div>
+
+        <h3>真实应用例子</h3>
+        <div class="apply-list">
+          <h4>TODO 应用领域</h4>
+          <ul>
+            <li><strong>领域 A</strong>：TODO 一两句话案例</li>
+            <li><strong>领域 B</strong>：TODO</li>
+            <li><strong>领域 C</strong>：TODO</li>
+          </ul>
+        </div>
+
+        <div class="framework-use">
+          TODO 这条原理在我们的工程栈里怎么被使用 · 具体改了哪个文件 · 改成什么样。
+        </div>
+
+        <div class="disclaim">
+          <strong>cite 提示</strong>：TODO 论文出版状态 / 备注（如 "preprint·尚未会议正式发表" / "完整 PDF 在 DTIC 公开档案"）。
+        </div>
+
+      </div>
+
+      <div class="principle-visual">
+        <!-- TODO: 替换为对应原理的 SVG 图 · 参考 svg-patterns.md 选模式 -->
+        <svg viewBox="0 0 420 400" role="img" aria-label="TODO 原理一示意图">
+          <text x="210" y="22" text-anchor="middle" class="svg-text" font-size="13" font-weight="600">TODO 图表标题</text>
+          <text x="210" y="38" text-anchor="middle" class="svg-text-dim" font-size="10">TODO 副标题</text>
+
+          <!-- TODO: 添加 rect / circle / text / arrow 节点 -->
+          <rect x="40" y="80" width="160" height="60" rx="10" class="svg-node primary"/>
+          <text x="120" y="105" text-anchor="middle" class="svg-text" font-size="12" font-weight="600">输入</text>
+          <text x="120" y="125" text-anchor="middle" class="svg-text-dim" font-size="10">TODO 描述</text>
+
+          <path d="M 200 110 L 230 110" stroke="var(--text-dim)" stroke-width="1.5" fill="none" marker-end="url(#ar)"/>
+
+          <rect x="230" y="80" width="160" height="60" rx="10" class="svg-node accent"/>
+          <text x="310" y="105" text-anchor="middle" class="svg-text" font-size="12" font-weight="600">输出</text>
+          <text x="310" y="125" text-anchor="middle" class="svg-text-dim" font-size="10">TODO 描述</text>
+        </svg>
+        <div class="visual-caption">TODO 图说明 · 1 行 italic</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Principle 2 · 复制粘贴扩展为更多 principle ========== -->
+  <section class="principle" id="p2">
+    <div class="principle-head">
+      <span class="principle-num">②</span>
+      <div class="principle-head-text">
+        <span class="principle-discipline signal">TODO 学科 / Discipline</span>
+        <h2 class="principle-title">TODO 原理二标题</h2>
+        <p class="principle-tagline">TODO tagline</p>
+      </div>
+    </div>
+
+    <div class="principle-body">
+      <div class="principle-text">
+        <div class="essence-box">TODO 精髓</div>
+        <h3>历史脉络</h3>
+        <p>TODO</p>
+        <div class="citation"><span class="year">YEAR</span> <span class="author">Author</span>：<em>Title.</em> TODO</div>
+        <div class="framework-use">TODO 怎么用</div>
+      </div>
+      <div class="principle-visual">
+        <svg viewBox="0 0 420 300" role="img" aria-label="TODO 原理二示意图">
+          <text x="210" y="22" text-anchor="middle" class="svg-text" font-size="13" font-weight="600">TODO 图表标题</text>
+          <!-- TODO 添加图形 -->
+        </svg>
+        <div class="visual-caption">TODO 图说明</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== Solutions · 6 张可折叠卡 · 可选模块 ========== -->
+  <section class="principle" id="solutions">
+    <div class="principle-head">
+      <span class="principle-num">③</span>
+      <div class="principle-head-text">
+        <span class="principle-discipline cogsci">SOLUTIONS · 推荐方案</span>
+        <h2 class="principle-title">N 个 solutions · 原理 + 适合度 + 工时</h2>
+        <p class="principle-tagline">TODO 简短介绍这部分包含 N 张卡 · 默认折叠 · 展开看每张卡详细原理。</p>
+      </div>
+    </div>
+
+    <div class="sol-grid">
+
+      <!-- 示例 Solution 卡 1 · data-fit 控制配色（3=⭐⭐⭐ 绿 · 2=⭐⭐ 黄 · 1=⭐ 灰） -->
+      <details class="sol-card" data-fit="3" open>
+        <summary>
+          <span class="sol-num">①</span>
+          <div class="sol-head-text">
+            <h3 class="sol-name">TODO Solution 名称 <small>(论文 venue · 年份)</small></h3>
+            <p class="sol-tagline">TODO 一句话讲这个方案是什么 · 怎么解决问题。</p>
+          </div>
+          <div class="sol-meta">
+            <span class="chip fit3">⭐⭐⭐ 适合</span>
+            <span class="chip eta">1-2h</span>
+            <span class="chip">TODO tag</span>
+          </div>
+        </summary>
+        <div class="sol-body">
+          <p>TODO 详细解释这个 solution 是什么 · 怎么工作 · 为什么对我们有用。</p>
+
+          <div class="citation">
+            <span class="year">YEAR</span> <span class="author">Authors</span>：<em>Title.</em> Venue (<a href="https://arxiv.org/abs/TODO" target="_blank" rel="noopener">arXiv TODO</a>)
+          </div>
+
+          <h4>核心机制</h4>
+          <p>TODO 说明这个方案的工作原理。</p>
+
+          <h4>对我们三层 limitation 的映射</h4>
+          <div class="layer-map">
+            <p><span class="layer-tag">L1 ✓</span>TODO 怎么解 L1</p>
+            <p><span class="layer-tag l2">L2 ✓</span>TODO 怎么解 L2</p>
+            <p><span class="layer-tag l3">L3 半解</span>TODO 部分解</p>
+          </div>
+
+          <h4>工程实施 mini-plan</h4>
+          <ul>
+            <li>新增 <code>scripts/TODO.py</code> · TODO 描述</li>
+            <li>修改 <code>scripts/TODO.py</code> · 加 TODO hook</li>
+            <li>预期效果 · TODO 数字</li>
+          </ul>
+        </div>
+      </details>
+
+      <!-- 复制扩展更多 sol-card · 修改 data-fit / 内容 -->
+
+    </div>
+  </section>
+
+  <!-- ========== Combo / Roadmap · 推荐组合 · 可选 ========== -->
+  <section class="principle" id="combo">
+    <div class="principle-head">
+      <span class="principle-num">④</span>
+      <div class="principle-head-text">
+        <span class="principle-discipline rl">RECOMMENDED · 落地组合</span>
+        <h2 class="principle-title">TODO 三件套 / 组合 · 总 X-Yh</h2>
+        <p class="principle-tagline">TODO tagline</p>
+      </div>
+    </div>
+
+    <div class="essence-box">
+      <strong>核心组合逻辑</strong>·TODO 一句话讲三件套怎么互补。
+    </div>
+
+    <div class="combo-grid">
+      <div class="combo-card">
+        <div class="combo-step">step 1 · TODO h</div>
+        <h4>TODO 步骤一</h4>
+        <p>TODO 描述</p>
+        <p style="margin-top:10px"><span class="combo-file">TODO/file.py</span></p>
+      </div>
+      <div class="combo-card">
+        <div class="combo-step">step 2 · TODO h</div>
+        <h4>TODO 步骤二</h4>
+        <p>TODO</p>
+      </div>
+      <div class="combo-card">
+        <div class="combo-step">step 3 · TODO h</div>
+        <h4>TODO 步骤三</h4>
+        <p>TODO</p>
+      </div>
+    </div>
+
+    <div class="roadmap-box">
+      <h3>工程实施 roadmap</h3>
+      <ol>
+        <li><strong>Step 1 · TODO</strong>——TODO 详细描述</li>
+        <li><strong>Step 2 · TODO</strong>——TODO</li>
+        <li><strong>Step 3 · TODO</strong>——TODO</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========== Footer ========== -->
+  <footer class="footer">
+    <p>TODO 页面标题 · 副标题（内部使用 · 非公开发布）</p>
+    <p>
+      <span class="badge">TODO badge 1</span>
+      <span class="badge">TODO badge 2</span>
+      <span class="badge">TODO badge 3</span>
+    </p>
+    <div class="nav-prev-next">
+      <!-- TODO: replace with actual cross-links · home / index / sibling pages -->
+      <a href="../index.html">🏠 Home</a>
+      <a href="adjacent-page.html">📚 Related</a>
+    </div>
+    <p style="margin-top:18px;color:var(--text-dim);font-size:12px;line-height:1.75">
+      Data sources · TODO list specific files / databases / notes consulted<br>
+      Reference list · TODO complete bibliography (each entry with arXiv ID / DOI / year)
+    </p>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  function getTheme(){
+    try { return localStorage.getItem("deepdive-theme") || "dark"; } catch(e) { return "dark"; }
+  }
+  function setTheme(t){
+    document.documentElement.dataset.theme = t;
+    var btn = document.querySelector(".theme-toggle");
+    if(btn){ btn.textContent = (t === "dark") ? "浅色" : "深色"; }
+    try { localStorage.setItem("deepdive-theme", t); } catch(e) {}
+  }
+  window.toggleTheme = function(){
+    var cur = document.documentElement.dataset.theme || "dark";
+    setTheme(cur === "dark" ? "light" : "dark");
+  };
+  setTheme(getTheme());
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener("click", function(e){
+      var id = a.getAttribute("href").slice(1);
+      var el = document.getElementById(id);
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:"smooth", block:"start"});
+        history.replaceState(null, "", "#" + id);
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
