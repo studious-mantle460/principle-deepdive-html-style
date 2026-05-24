@@ -1,5 +1,7 @@
 # Principle Deepdive HTML Style
 
+**English** | [中文](README.zh-CN.md)
+
 > A reusable visual recipe for **single-file analytical HTML articles** — dark/light dual-theme, indigo/amber accents, inline-SVG diagrams, collapsible cards, zero external dependencies, offline-readable under 300KB.
 
 Packaged as an [**agent skill**](https://docs.anthropic.com/en/docs/claude-code/skills) for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Cursor](https://cursor.sh/). Drop it in your agent skill directory and the agent will use it whenever you ask for a "principle deep-dive HTML" / "single-file analytical HTML article" / similar.
